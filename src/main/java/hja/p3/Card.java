@@ -34,6 +34,24 @@ public class Card implements Comparable<Card>{
     public int getNumber(){
         return number;
     }
+    public String numberORLetter(){
+        switch(number){
+            case 10:
+                return "T";
+            case 11:
+                return "J";
+            case 12:
+                return "Q";
+            case 13:
+                return "K";
+            case 14:
+                return "A";
+            case 1:
+                return "A";
+            default:
+                return number+"";   
+        }
+    }
     public String getSuit(){
         return suit;
     }

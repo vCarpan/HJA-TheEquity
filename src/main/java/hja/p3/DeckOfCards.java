@@ -29,16 +29,34 @@ public class DeckOfCards {
         }else{
             int numero = (int)(Math.random()*orderCards.length());//
             if(numero%2==0){
-                randomCards += ""+orderCards.charAt(numero) + orderCards.charAt(numero + 1);
+                randomCards = ""+orderCards.charAt(numero) + orderCards.charAt(numero + 1);
                 orderCards = orderCards.replace(""+orderCards.charAt(numero) + orderCards.charAt(numero + 1),"");
             }else{
-                randomCards += ""+orderCards.charAt(numero - 1) + orderCards.charAt(numero);
+                randomCards = ""+orderCards.charAt(numero - 1) + orderCards.charAt(numero);
                 orderCards = orderCards.replace(""+orderCards.charAt(numero - 1) + orderCards.charAt(numero),"");
             }
         }
         return  new Card(randomCards.charAt(0)+"",randomCards.charAt(1)+"");             
     }
+
+    void setDeck(String a) {
+        orderCards = a;
+    }
+
+    void setOriginalCards() {
+        originalCards = orderCards;
+    }
     
+    public String getOrderCards(){
+        return orderCards;
+    }
     
+    public String getOriginalCards(){
+        return originalCards;
+    }
+
+    void removeCard(Card c) {
+        orderCards = orderCards.replace(""+c.numberORLetter() + c.getSuit(),"");
+    }
     
 }

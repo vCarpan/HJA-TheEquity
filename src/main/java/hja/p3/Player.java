@@ -58,4 +58,7 @@ public class Player implements Comparable<Player>{
     public double getEquity(){
         return equity;
     }
+    public void resetHand(){
+        bestHand = new Hand();
+    }
 }

@@ -10,6 +10,9 @@ public class main{
         cartas.add(new Card("Q","c"));
         cartas.add(new Card("6","s"));
         cartas.add(new Card("8","c"));
+        cartas.add(new Card("K","d"));
+        cartas.add(new Card("K","h"));
+        
         Game game = new Game(cartas);
         System.out.println(game.getEquity(cartas));
     }
