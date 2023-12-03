@@ -80,4 +80,22 @@ public class Card implements Comparable<Card>{
         number = i;
    }
     
+   
+   public String getFileName(){
+       return number+"of"+getSuitName()+".png";
+   } 
+   private String getSuitName(){
+       switch(suit){
+           case "s":
+               return "spades";
+           case "c":
+               return "clubs";
+           case "d":
+               return "diamonds";
+           case "h":
+               return "hearts";
+           default:
+               return "";
+       }
+   }
 }

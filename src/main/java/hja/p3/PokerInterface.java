@@ -18,7 +18,7 @@ public class PokerInterface extends JFrame {
 public PokerInterface() {
         setTitle("Poker Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1200, 1200);
 
         JLayeredPane layeredPane = new JLayeredPane();
         setContentPane(layeredPane);
@@ -63,6 +63,22 @@ public PokerInterface() {
             angle = 2.0 * Math.PI / 6 * i;
             int x = centerX + (int) (Math.cos(angle) * radius);
             int y = centerY + (int) (Math.sin(angle) * radius);
+            switch(i){
+                case(0):
+                    x += 200;
+                break;
+                case(3):
+                    x -= 200;
+                break;
+                case(1):
+                case(5):
+                    x += 50;
+                break;
+                case(2):
+                case(4):
+                    x -= 50;
+                break;
+            }
             positions[i] = new Point(x, y);
         }
         return positions;

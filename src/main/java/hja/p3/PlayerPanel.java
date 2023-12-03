@@ -5,9 +5,13 @@
 package hja.p3;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,40 +23,37 @@ import javax.swing.SwingConstants;
  * @author penap
  */
 class PlayerPanel extends JPanel {
+
+    private String imagePath = "src\\main\\java\\hja\\p3\\cardsSmaller\\backsideCard.png";
+    private ImageIcon cardBack = new ImageIcon(imagePath);
+    private CardClicker cardClickerListener;
+
     public PlayerPanel(String playerName) {
         setLayout(new BorderLayout());
 
         // Nombre del jugador encima de las cartas
         JLabel playerNameLabel = new JLabel(playerName, SwingConstants.CENTER);
+        playerNameLabel.setForeground(Color.white);
         add(playerNameLabel, BorderLayout.NORTH);
 
-        // Panel para las cartas
-        JPanel cardPanel = new JPanel(new FlowLayout());
-        JButton cardButton1 = new JButton("Card 1");
-        JButton cardButton2 = new JButton("Card 2");
-        cardPanel.add(cardButton1);
-        cardPanel.add(cardButton2);
-        add(cardPanel, BorderLayout.CENTER);
+        JLabel cardLabel1 = new JLabel(cardBack);
+        JLabel cardLabel2 = new JLabel(cardBack);
+        add(cardLabel1, BorderLayout.WEST);
+        add(cardLabel2, BorderLayout.EAST);
 
         // JLabel adicional debajo de las cartas
-        JLabel additionalLabel = new JLabel("Otro JLabel", SwingConstants.CENTER);
-        add(additionalLabel, BorderLayout.SOUTH);
+        JLabel equityLabel = new JLabel("0%", SwingConstants.CENTER);
+        equityLabel.setForeground(Color.white);
+        add(equityLabel, BorderLayout.SOUTH);
 
-        // ActionListeners para las cartas
-        cardButton1.addActionListener(e -> JOptionPane.showMessageDialog(null, "Operación con carta 1 realizada"));
-        cardButton2.addActionListener(e -> JOptionPane.showMessageDialog(null, "Operación con carta 2 realizada"));
+        // Agregar MouseListener a las cartas
+        cardClickerListener = new CardClicker(cardLabel1);
+        cardLabel1.addMouseListener(cardClickerListener);
+
+        cardClickerListener = new CardClicker(cardLabel2);
+        cardLabel2.addMouseListener(cardClickerListener);
     }
 }
 
-class CardPanel extends JPanel {
-    public CardPanel(String cardName) {
-        setLayout(new FlowLayout());
-        JLabel cardLabel = new JLabel(cardName);
-        JButton cardButton = new JButton("Operación con carta");
 
-        add(cardLabel);
-        add(cardButton);
 
-        cardButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Operación con carta realizada"));
-    }
-}
