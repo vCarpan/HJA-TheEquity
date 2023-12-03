@@ -6,8 +6,11 @@ package hja.p3;
 
 /**
  *
- * @author usuario_local
+ * @author penap
  */
 public class Gui {
-    
+    public Gui(){
+        PokerInterface pUI = new PokerInterface();
+        pUI.setVisible(true);
+    }
 }

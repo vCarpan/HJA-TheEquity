@@ -18,8 +18,8 @@ public class main{
         
         List<Card> cartas = new ArrayList<>();
         
-        GameOklahoma game = new GameOklahoma(cartas);
-        System.out.println(game.getEquityOklahoma(cartas));
-        
+        //GameOklahoma game = new GameOklahoma(cartas);
+        //System.out.println(game.getEquityOklahoma(cartas));
+        Gui interfaz = new Gui();
     }
 }
