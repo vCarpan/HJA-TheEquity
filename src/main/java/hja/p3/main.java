@@ -6,7 +6,7 @@ import java.util.List;
 public class main{
 
     public static void main(String[] args) {
-        List<Card> cartas = new ArrayList<>();
+        /*List<Card> cartas = new ArrayList<>();
         cartas.add(new Card("Q","c"));
         cartas.add(new Card("6","s"));
         cartas.add(new Card("8","c"));
@@ -14,6 +14,12 @@ public class main{
         cartas.add(new Card("K","h"));
         
         Game game = new Game(cartas);
-        System.out.println(game.getEquity(cartas));
+        System.out.println(game.getEquity(cartas));*/
+        
+        List<Card> cartas = new ArrayList<>();
+        
+        GameOklahoma game = new GameOklahoma(cartas);
+        System.out.println(game.getEquityOklahoma(cartas));
+        
     }
 }
