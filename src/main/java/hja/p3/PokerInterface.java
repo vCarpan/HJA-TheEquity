@@ -124,42 +124,9 @@ public class PokerInterface extends JFrame {
                         }                  
                     }
                     if(jugadores>1){
-                        /*
-                        // Crea un ExecutorService con 4 hilos
-                        ExecutorService executorService = Executors.newFixedThreadPool(4);
-
-                        // Lista para almacenar los resultados futuros de los hilos
-                        java.util.List<Future<java.util.List<Double>>> futures = new ArrayList<>();
-
-                        // Envía Callable para ejecutar getEquity en paralelo
-                        for (int i = 0; i < 4; i++) {
-                            Game gameCopy = game.copy();  // Implementa el método copy en tu clase Game
-                            java.util.List<Card> predBoardCopy = new ArrayList<>(predBoard);
-                            Callable<java.util.List<Double>> task = () -> gameCopy.getEquity(predBoardCopy, playerList);
-                            // Envía el Callable al ExecutorService y guarda el Future resultante
-                            futures.add(executorService.submit(task));
-                        }
-
-                        // Espera a que todos los hilos terminen y suma los resultados
-                        java.util.List<Double> playerWins = new ArrayList<>();
-                        for(int i=0; i<6;i++){
-                            playerWins.add(0.0);
-                        }
-                        for (Future<java.util.List<Double>> future : futures) {                         
-                            try {
-                                for(int i=0; i<future.get().size();i++){
-                                    playerWins.set(i,playerWins.get(i)+future.get().get(i));
-                                }
-                            } catch (InterruptedException | ExecutionException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                        for(int i=0; i<playerWins.size();i++){                           
-                            playersPanel.get(i).setNumber(playerWins.get(i));                            
-                        }*/
                         java.util.List<Double> playerWins = game.getEquity(predBoard,playerList);
                         for(int i=0; i<playerWins.size();i++){                           
-                            playersPanel.get(i).setNumber(playerWins.get(i));                            
+                            playersPanel.get(i).setNumber(Math.floor(playerWins.get(i)*1000)/1000);                            
                         }  
                     }else{
                         JOptionPane.showMessageDialog(null, "Debe haber por lo menos dos jugadores aptos", "Error",JOptionPane.ERROR_MESSAGE);

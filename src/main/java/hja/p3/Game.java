@@ -1,14 +1,8 @@
 package hja.p3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class Game implements Cloneable{
 
@@ -16,7 +10,6 @@ public class Game implements Cloneable{
     
     private final int N_PLAYERS = 6;
     private DeckOfCards deck;
-    private int N_SIMULATIONS = 2000000;
     private int TOTAL_SIMULATIONS = 2000000;
     
     public Game(){
@@ -39,8 +32,8 @@ public class Game implements Cloneable{
         Hand bestHand = new Hand();
         Hand currHand;
         int compare;
-
-        for (int i = 0; i < N_SIMULATIONS; i++) {
+        calculateSimulations(predBoard.size());
+        for (int i = 0; i < TOTAL_SIMULATIONS; i++) {
             List<Integer> winningPlayers = new ArrayList<>();
             Board board = new Board();
 
@@ -58,6 +51,7 @@ public class Game implements Cloneable{
                 System.out.println(PlayerList.get(k).getPlayerCards().get(0).toString() + " " +PlayerList.get(k).getPlayerCards().get(1).toString());
             }
             System.out.println("Board: "+board.getBoardCard());*/
+            
             int x=0;
             for (x = 0; x < N_PLAYERS; x++) {
                 if(PlayerList.get(x).getElement1()){
@@ -106,15 +100,28 @@ public class Game implements Cloneable{
     public DeckOfCards getDeck(){
         return deck;
     }
-    public Game copy() {
-        Game clonedGame = null;
-        try {
-            clonedGame = (Game) super.clone();
-            clonedGame.deck = this.deck.copy();
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+    
+    private void calculateSimulations(int size) {
+        switch(size){
+            case 5:
+                TOTAL_SIMULATIONS = 1;
+                break;
+            case 4: 
+                TOTAL_SIMULATIONS = 100000;
+                break;
+            case 3: 
+                TOTAL_SIMULATIONS = 300000;
+                break;
+            case 2: 
+                TOTAL_SIMULATIONS = 500000;
+                break;
+            case 1: 
+                TOTAL_SIMULATIONS = 1500000;
+                break;
+            case 0: 
+                TOTAL_SIMULATIONS = 2000000;
+                break;
         }
-        return clonedGame;
     }
 
     

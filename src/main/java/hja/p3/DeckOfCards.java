@@ -2,7 +2,6 @@
 package hja.p3;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DeckOfCards implements Cloneable{
    
@@ -23,12 +22,12 @@ public class DeckOfCards implements Cloneable{
         orderCards = originalCards;
     }
     
-    public synchronized Card dealingCard(){
+    public Card dealingCard(){
         String randomCards = "";
         if (orderCards == null || orderCards.length()<1) {
             return null;
         }else{
-            int numero = ThreadLocalRandom.current().nextInt(orderCards.length());
+            int numero = (int)(Math.random()*orderCards.length());//
             if(numero%2==0){
                 randomCards = ""+orderCards.charAt(numero) + orderCards.charAt(numero + 1);
                 orderCards = orderCards.replace(""+orderCards.charAt(numero) + orderCards.charAt(numero + 1),"");
@@ -65,16 +64,5 @@ public class DeckOfCards implements Cloneable{
     public String getOriginalCards(){
         return originalCards;
     }
-
-    public DeckOfCards copy() {
-        DeckOfCards copiedDeck = new DeckOfCards();
-
-        // Copia de los datos relevantes
-        copiedDeck.orderCards = new String(this.orderCards);
-        copiedDeck.originalCards = new String("");
-
-        return copiedDeck;   
-    }
-
     
 }
