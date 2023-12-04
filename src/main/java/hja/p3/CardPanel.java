@@ -13,6 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import hja.p3.DeckOfCards;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 
 class CardPanel extends JPanel {
     
@@ -28,6 +31,23 @@ class CardPanel extends JPanel {
         add(cardLabel);
         cardClickerListener = new CardClicker(cardLabel, deck);
         cardLabel.addMouseListener(cardClickerListener);
+        JButton random = new JButton("Random");
+       
+        random.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Icon icon = cardLabel.getIcon();
+                    Card ant = Card.getCardByIcon(icon);
+                    if(ant!=null){
+                        deck.addCard(ant);
+                    }
+                    Card c  = deck.dealingCard();
+                    String path = "src\\main\\java\\hja\\p3\\cardsSmaller\\"+c.numberORLetter()+c.getSuit()+".png";
+                    ImageIcon ic = new ImageIcon(path);
+                    cardLabel.setIcon(ic);
+                }
+        });
+        add(random);
     }
     public Card getCard(){
         Icon icon = cardLabel.getIcon();

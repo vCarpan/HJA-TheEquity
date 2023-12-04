@@ -22,7 +22,7 @@ public class PokerInterface extends JFrame {
             game = new Game();
             setTitle("Poker Game");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(1200, 700);
+            setSize(1200, 710);
 
             JLayeredPane layeredPane = new JLayeredPane();
             setContentPane(layeredPane);
@@ -56,7 +56,7 @@ public class PokerInterface extends JFrame {
             for (int i = 1; i <= 6; i++) {
                 PlayerPanel playerPanel = new PlayerPanel("Player " + i,game.getDeck());
                 playerPanel.setOpaque(false);
-                playerPanel.setBounds(playerPositions[i - 1].x - 75, playerPositions[i - 1].y - 75, 150, 150);
+                playerPanel.setBounds(playerPositions[i - 1].x - 75, playerPositions[i - 1].y - 75, 165, 175);
                 layeredPane.add(playerPanel, Integer.valueOf(Integer.MAX_VALUE));
                 playersPanel.add(playerPanel);
             }

@@ -43,12 +43,43 @@ class PlayerPanel extends JPanel {
         cardLabel2 = new JLabel(cardBack);
         add(cardLabel1, BorderLayout.WEST);
         add(cardLabel2, BorderLayout.EAST);
-
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BorderLayout());
+        JButton random1 = new JButton("Random");
+        JButton random2 = new JButton("Random");
+       
+        random1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Icon icon = cardLabel1.getIcon();
+                    Card ant = Card.getCardByIcon(icon);
+                    if(ant!=null){
+                        deck.addCard(ant);
+                    }
+                    Card c  = deck.dealingCard();
+                    setRandomCard1(c.numberORLetter()+c.getSuit()+"");
+                }
+        });
+        random2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Icon icon = cardLabel2.getIcon();
+                    Card ant = Card.getCardByIcon(icon);
+                    if(ant!=null){
+                        deck.addCard(ant);
+                    }
+                    Card c  = deck.dealingCard();
+                    setRandomCard2(c.numberORLetter()+c.getSuit()+"");
+                }
+        });
+        southPanel.add(random1,BorderLayout.WEST);
+        southPanel.add(random2,BorderLayout.EAST);
+        southPanel.setOpaque(false);
         // JLabel adicional debajo de las cartas
         equityLabel = new JLabel("0%", SwingConstants.CENTER);
         equityLabel.setForeground(Color.white);
-        add(equityLabel, BorderLayout.SOUTH);
-
+        southPanel.add(equityLabel, BorderLayout.SOUTH);
+        add(southPanel,BorderLayout.SOUTH);
         // Agregar MouseListener a las cartas
         cardClickerListener = new CardClicker(cardLabel1, deck);
         cardLabel1.addMouseListener(cardClickerListener);
