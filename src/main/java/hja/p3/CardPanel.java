@@ -7,23 +7,31 @@ package hja.p3;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import hja.p3.DeckOfCards;
 
 class CardPanel extends JPanel {
     
     private String imagePath = "src\\main\\java\\hja\\p3\\cardsSmaller\\backsideCard.png";
     private ImageIcon cardBack = new ImageIcon(imagePath);
     private CardClicker cardClickerListener;
+    JLabel cardLabel;
     
-    public CardPanel(String cardName) {
+    public CardPanel(String cardName, DeckOfCards deck) {
         setLayout(new FlowLayout());
 
-        JLabel cardLabel = new JLabel(cardBack);
+        cardLabel = new JLabel(cardBack);
         add(cardLabel);
-        cardClickerListener = new CardClicker(cardLabel);
+        cardClickerListener = new CardClicker(cardLabel, deck);
         cardLabel.addMouseListener(cardClickerListener);
     }
+    public Card getCard(){
+        Icon icon = cardLabel.getIcon();
+        return Card.getCardByIcon(icon);
+    }
+
 }

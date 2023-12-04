@@ -20,8 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class CardChooser extends JFrame{
-    
-    public CardChooser(JLabel card) {
+    public DeckOfCards deck;
+    public CardChooser(JLabel card, DeckOfCards deck) {
+        this.deck = deck;
         setLayout(new GridLayout(4, 13)); // 4 filas y 13 columnas para representar las cartas
         setSize(1200,700);
         String cardImagePng = "";
@@ -32,46 +33,53 @@ public class CardChooser extends JFrame{
                 String imagePath = "src\\main\\java\\hja\\p3\\cardsSmaller\\" + cardImagePng;
                 ImageIcon cardImage = new ImageIcon(imagePath);
                 JLabel cartaLabel = new JLabel(cardImage);
-                cartaLabel.addMouseListener(new CartaMouseListener(j,i, card, cardImage, this));
+                cartaLabel.addMouseListener(new CartaMouseListener(card, cardImage, this));
                 add(cartaLabel);
             }
         }
+        String imagePath = "src\\main\\java\\hja\\p3\\cardsSmaller\\backsideCard.png";
+        ImageIcon cardImage = new ImageIcon(imagePath);
+        JLabel cartaLabel = new JLabel(cardImage);
+        cartaLabel.addMouseListener(new CartaMouseListener(card, cardImage, this));
+        add(cartaLabel);
         setVisible(true);
     }
 
     private String getCardImage(int i, int j) {
         String result = "";
         switch(j){
+           case (10):
+               result += "T";
+           break;
            case (11):
-               result += "jack";
+               result += "J";
            break;
            case (12):
-               result += "queen";
+               result += "Q";
             break;
            case (13):
-               result += "king";
+               result += "K";
             break;
            case (1):
-               result += "ace";
+               result += "A";
             break;
            default:
                result += j;
             break;
        }
         
-        result += "_of_";
         switch(i){
            case (0):
-               result += "spades.png";
+               result += "s.png";
             break;
            case (1):
-               result += "clubs.png";
+               result += "c.png";
             break;
            case (2):
-               result += "diamonds.png";
+               result += "d.png";
             break;
            case (3):
-               result += "hearts.png";
+               result += "h.png";
             break;
            default:
                result += "";
@@ -82,13 +90,11 @@ public class CardChooser extends JFrame{
     }
 
     private static class CartaMouseListener extends MouseAdapter {
-        private final String nombreCarta;
         private JLabel card;
         private ImageIcon image;
         private CardChooser frame;
 
-        public CartaMouseListener(int number, int suit, JLabel card , ImageIcon cardImage, CardChooser frame) {
-            this.nombreCarta = number+" "+suit;
+        public CartaMouseListener(JLabel card , ImageIcon cardImage, CardChooser frame) {
             this.card = card;
             this.image = cardImage;
             this.frame = frame;
@@ -97,11 +103,18 @@ public class CardChooser extends JFrame{
         @Override
         public void mouseClicked(MouseEvent e) {
             // Aquí puedes llamar a tu función pasando el nombre de la carta
-            System.out.println("Carta clicada: " + nombreCarta);
             // Llama a tu función aquí pasando el nombre de la carta
             // funcionDeCartaClicada(nombreCarta);
+            Card anterior = Card.getCardByIcon(card.getIcon());
+            if(anterior!=null){
+                frame.deck.addCard(anterior);
+            }
             card.setIcon(image);
-            System.out.println("La carta es" + nombreCarta + " y su icon es " + card.getIcon());
+            Card nueva = Card.getCardByIcon(card.getIcon());
+            if(nueva!=null){
+                frame.deck.removeCard(nueva);
+            }
+            System.out.println("su icon es " + card.getIcon());
             frame.setVisible(false);
             
         }

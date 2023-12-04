@@ -12,14 +12,18 @@ import javax.swing.JLabel;
 public class CardClicker extends MouseAdapter{
     
     private JLabel card;
+    private DeckOfCards deck;
     
-    public CardClicker(JLabel cardLabel){
+    public CardClicker(JLabel cardLabel, DeckOfCards deck){
         super();
         card = cardLabel;
+        this.deck = deck;
     }
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        CardChooser cardChooser = new CardChooser(card);
+
+        CardChooser cardChooser = new CardChooser(card, deck);
+        
     }
 }

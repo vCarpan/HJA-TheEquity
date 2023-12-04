@@ -1,5 +1,7 @@
 package hja.p3;
 
+import javax.swing.Icon;
+
 public class Card implements Comparable<Card>{
     
     private  int number;
@@ -97,5 +99,15 @@ public class Card implements Comparable<Card>{
            default:
                return "";
        }
+   }
+   
+   static Card getCardByIcon(Icon icon){
+       String ruta = icon.toString();
+        ruta = ruta.replace("src\\main\\java\\hja\\p3\\cardsSmaller\\", "");
+        ruta = ruta.replace(".png", "");
+        if(ruta.length()>2){
+            return null;
+        }
+        return new Card(ruta.charAt(0)+"",ruta.charAt(1)+""); 
    }
 }

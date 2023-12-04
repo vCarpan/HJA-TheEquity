@@ -38,7 +38,13 @@ public class DeckOfCards {
         }
         return  new Card(randomCards.charAt(0)+"",randomCards.charAt(1)+"");             
     }
-
+    
+    public void addCard(Card c){
+        orderCards += c.numberORLetter()+c.getSuit()+"";
+    }
+    public void removeCard(Card c){
+        orderCards = orderCards.replace(""+c.numberORLetter() + c.getSuit(),"");
+    }
     void setDeck(String a) {
         orderCards = a;
     }
@@ -55,8 +61,5 @@ public class DeckOfCards {
         return originalCards;
     }
 
-    void removeCard(Card c) {
-        orderCards = orderCards.replace(""+c.numberORLetter() + c.getSuit(),"");
-    }
     
 }

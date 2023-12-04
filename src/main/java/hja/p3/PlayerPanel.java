@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,8 +28,10 @@ class PlayerPanel extends JPanel {
     private String imagePath = "src\\main\\java\\hja\\p3\\cardsSmaller\\backsideCard.png";
     private ImageIcon cardBack = new ImageIcon(imagePath);
     private CardClicker cardClickerListener;
-
-    public PlayerPanel(String playerName) {
+    private JLabel cardLabel1;
+    private JLabel cardLabel2;
+    JLabel equityLabel;
+    public PlayerPanel(String playerName, DeckOfCards deck) {
         setLayout(new BorderLayout());
 
         // Nombre del jugador encima de las cartas
@@ -36,22 +39,46 @@ class PlayerPanel extends JPanel {
         playerNameLabel.setForeground(Color.white);
         add(playerNameLabel, BorderLayout.NORTH);
 
-        JLabel cardLabel1 = new JLabel(cardBack);
-        JLabel cardLabel2 = new JLabel(cardBack);
+        cardLabel1 = new JLabel(cardBack);
+        cardLabel2 = new JLabel(cardBack);
         add(cardLabel1, BorderLayout.WEST);
         add(cardLabel2, BorderLayout.EAST);
 
         // JLabel adicional debajo de las cartas
-        JLabel equityLabel = new JLabel("0%", SwingConstants.CENTER);
+        equityLabel = new JLabel("0%", SwingConstants.CENTER);
         equityLabel.setForeground(Color.white);
         add(equityLabel, BorderLayout.SOUTH);
 
         // Agregar MouseListener a las cartas
-        cardClickerListener = new CardClicker(cardLabel1);
+        cardClickerListener = new CardClicker(cardLabel1, deck);
         cardLabel1.addMouseListener(cardClickerListener);
 
-        cardClickerListener = new CardClicker(cardLabel2);
+        cardClickerListener = new CardClicker(cardLabel2, deck);
         cardLabel2.addMouseListener(cardClickerListener);
+    }
+    public Pair<Card,Card> getCards(){
+        Card c1;
+        Icon icon = cardLabel1.getIcon();
+        c1 = Card.getCardByIcon(icon);
+        Card c2;
+        Icon icon2 = cardLabel2.getIcon();
+        c2 = Card.getCardByIcon(icon2);
+        return new Pair<Card,Card>(c1,c2); 
+    }
+
+    void setRandomCard1(String card) {
+        String path = "src\\main\\java\\hja\\p3\\cardsSmaller\\"+card+".png";
+        ImageIcon ic = new ImageIcon(path);
+        cardLabel1.setIcon(ic);
+    }
+
+    void setRandomCard2(String card) {
+        String path = "src\\main\\java\\hja\\p3\\cardsSmaller\\"+card+".png";
+        ImageIcon ic = new ImageIcon(path);
+        cardLabel2.setIcon(ic);
+    }
+    public void setNumber(Double number){
+        equityLabel.setText(number.toString()+"%");
     }
 }
 

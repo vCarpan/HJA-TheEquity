@@ -9,13 +9,14 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Game {
+
+    
     
     private final int N_PLAYERS = 6;
-    private ArrayList<Player> PlayerList = new ArrayList<>();
     private DeckOfCards deck;
     private int N_SIMULATIONS = 2000000;
     
-    public Game(List<Card> predBoard){
+    public Game(){
         deck = new DeckOfCards();
         //System.out.println("");
         /*for(int i = 0; i < N_PLAYERS; i++){
@@ -25,7 +26,7 @@ public class Game {
             System.out.println("J" + i);
             System.out.println(PlayerList.get(i).getPlayerCards().get(0).toString() + " " +PlayerList.get(i).getPlayerCards().get(1).toString());
         }*/
-        PlayerList.add(new Player("J" + 0));
+        /*PlayerList.add(new Player("J" + 0));
         PlayerList.get(0).addCard(new Card("8","d"));
         PlayerList.get(0).addCard(new Card("8","h"));
         deck.removeCard(new Card("8","d"));
@@ -63,64 +64,20 @@ public class Game {
         
         for(int i=0; i < predBoard.size(); i++){
             deck.removeCard(predBoard.get(i));
-        }
+        }*/
         
-        deck.setOriginalCards();
+        
 
     }
-    
-
-    /*public ArrayList<Double> getEquity(){
-        ArrayList<Double> playerWins = new ArrayList<>();
-        for (int i = 0; i < N_PLAYERS; i++) {
-            playerWins.add(0.0);
-        }
-        int compare;
-        Hand bestHand;
-        Hand currHand;
-        for(int i = 0; i < N_SIMULATIONS; i++){
-            Stack<Integer> playerTie = new Stack<Integer>();
-            Board board = new Board();
-            for(int j = 0; j < 5; j++){
-                Card c = deck.dealingCard();
-                board.addBoardCard(c);
-            }
-            playerTie.push(0);
-            PlayerList.get(0).bestHand(board.getBoardCard());
-            bestHand = PlayerList.get(0).getBestHand();
-            for(int k = 1; k < N_PLAYERS; k++){
-
-                PlayerList.get(k).bestHand(board.getBoardCard());
-                currHand = PlayerList.get(k).getBestHand();
-                //System.out.println("Jugador"+ k + " tiene: " + currHand + " contra: "+ bestHand );
-                compare = currHand.compareTo(bestHand);
-                if(compare == 1){
-                    bestHand = currHand;
-                    playerTie.removeAllElements();
-                    playerTie.push(k);
-                }
-                else if(compare == 0){
-                    playerTie.push(k);
-                }
-                //System.out.println("Esta ganando " + playerTie.toString());
-            }
-            int nWins = playerTie.size();
-            int aux;
-            //System.out.print("Resultado final: "+playerTie.toString() );
-            while(!playerTie.empty()){
-                aux = playerTie.pop();
-                double anterior = playerWins.get(aux);
-                playerWins.set(aux,anterior +(1.0/nWins));
-            }
-            deck.reset();
-        }
-        for(int i = 0; i < N_PLAYERS; i++){
-            double anterior = playerWins.get(i);
-            playerWins.set(i, (anterior/N_SIMULATIONS)*100); 
-        }
-        return playerWins;
-    }*/
-    public List<Double> getEquity(List<Card> predBoard) {
+ 
+    public String dealingRandomCard() {
+        Card c = deck.dealingCard();
+        return c.numberORLetter()+c.getSuit()+"";
+    }
+    public List<Double> getEquity(List<Card> predBoard, ArrayList<Player> PlayerList) {
+        deck.setOriginalCards();
+        System.out.println(deck.getOriginalCards()+":"+deck.getOriginalCards().length());
+        System.out.println(deck.getOrderCards()+":"+deck.getOrderCards().length());
         List<Double> playerWins = new ArrayList<>();
 
         for (int i = 0; i < N_PLAYERS; i++) {
@@ -176,15 +133,18 @@ public class Game {
 
             deck.reset();
         }
-    double suma = 0.0;    
-    for (int i = 0; i < N_PLAYERS; i++) {
-        playerWins.set(i, (playerWins.get(i) / N_SIMULATIONS) * 100);
-        suma += playerWins.get(i);
-    }
-    System.out.println(suma);
+        double suma = 0.0;    
+        for (int i = 0; i < N_PLAYERS; i++) {
+            playerWins.set(i, (playerWins.get(i) / N_SIMULATIONS) * 100);
+            suma += playerWins.get(i);
+        }
+        System.out.println(suma);
 
-    return playerWins;
-}
+        return playerWins;
+    }
+    public DeckOfCards getDeck(){
+        return deck;
+    } 
 
     
 }
