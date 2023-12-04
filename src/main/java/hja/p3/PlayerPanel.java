@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,6 +32,7 @@ class PlayerPanel extends JPanel {
     private JLabel cardLabel1;
     private JLabel cardLabel2;
     JLabel equityLabel;
+    JCheckBox foldCheckBox;
     public PlayerPanel(String playerName, DeckOfCards deck) {
         setLayout(new BorderLayout());
 
@@ -76,9 +78,17 @@ class PlayerPanel extends JPanel {
         southPanel.add(random2,BorderLayout.EAST);
         southPanel.setOpaque(false);
         // JLabel adicional debajo de las cartas
+        
+        JPanel foldPanel = new JPanel(); 
+        foldPanel.setOpaque(false);
         equityLabel = new JLabel("0%", SwingConstants.CENTER);
         equityLabel.setForeground(Color.white);
-        southPanel.add(equityLabel, BorderLayout.SOUTH);
+        foldPanel.add(equityLabel);
+        foldCheckBox = new JCheckBox("Fold");
+        foldCheckBox.setOpaque(false);
+        foldCheckBox.setForeground(Color.RED);
+        foldPanel.add(foldCheckBox);
+        southPanel.add(foldPanel,  BorderLayout.SOUTH);
         add(southPanel,BorderLayout.SOUTH);
         // Agregar MouseListener a las cartas
         cardClickerListener = new CardClicker(cardLabel1, deck);
@@ -110,6 +120,13 @@ class PlayerPanel extends JPanel {
     }
     public void setNumber(Double number){
         equityLabel.setText(number.toString()+"%");
+    }
+    public boolean isFold(){
+        return foldCheckBox.isSelected();
+    }
+    public void setFold(){
+        if(!foldCheckBox.isSelected())
+            foldCheckBox.doClick();
     }
 }
 

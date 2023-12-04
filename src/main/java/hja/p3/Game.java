@@ -7,74 +7,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Game {
+public class Game implements Cloneable{
 
     
     
     private final int N_PLAYERS = 6;
     private DeckOfCards deck;
     private int N_SIMULATIONS = 2000000;
+    private int TOTAL_SIMULATIONS = 2000000;
     
     public Game(){
         deck = new DeckOfCards();
-        //System.out.println("");
-        /*for(int i = 0; i < N_PLAYERS; i++){
-            PlayerList.add(new Player("J" + i));
-            PlayerList.get(i).addCard(deck.dealingCard());
-            PlayerList.get(i).addCard(deck.dealingCard());  
-            System.out.println("J" + i);
-            System.out.println(PlayerList.get(i).getPlayerCards().get(0).toString() + " " +PlayerList.get(i).getPlayerCards().get(1).toString());
-        }*/
-        /*PlayerList.add(new Player("J" + 0));
-        PlayerList.get(0).addCard(new Card("8","d"));
-        PlayerList.get(0).addCard(new Card("8","h"));
-        deck.removeCard(new Card("8","d"));
-        deck.removeCard(new Card("8","h"));
-        
-        PlayerList.add(new Player("J" + 1));
-        PlayerList.get(1).addCard(new Card("A","c"));
-        PlayerList.get(1).addCard(new Card("A","d")); 
-        deck.removeCard(new Card("A","c"));
-        deck.removeCard(new Card("A","d"));
-        
-        PlayerList.add(new Player("J" + 2));
-        PlayerList.get(2).addCard(new Card("Q","d"));
-        PlayerList.get(2).addCard(new Card("Q","h")); 
-        deck.removeCard(new Card("Q","d"));
-        deck.removeCard(new Card("Q","h"));
-        
-        PlayerList.add(new Player("J" + 3));
-        PlayerList.get(3).addCard(new Card("A","s"));
-        PlayerList.get(3).addCard(new Card("K","s"));
-        deck.removeCard(new Card("A","s"));
-        deck.removeCard(new Card("K","s"));
-        
-        PlayerList.add(new Player("J" + 4));
-        PlayerList.get(4).addCard(new Card("K","c"));
-        PlayerList.get(4).addCard(new Card("Q","s"));
-        deck.removeCard(new Card("K","c"));
-        deck.removeCard(new Card("Q","s"));
-        
-        PlayerList.add(new Player("J" + 5));
-        PlayerList.get(5).addCard(new Card("7","c"));
-        PlayerList.get(5).addCard(new Card("6","d"));
-        deck.removeCard(new Card("7","c"));
-        deck.removeCard(new Card("6","d"));
-        
-        for(int i=0; i < predBoard.size(); i++){
-            deck.removeCard(predBoard.get(i));
-        }*/
-        
-        
-
     }
  
     public String dealingRandomCard() {
         Card c = deck.dealingCard();
         return c.numberORLetter()+c.getSuit()+"";
     }
-    public List<Double> getEquity(List<Card> predBoard, ArrayList<Player> PlayerList) {
+    public List<Double> getEquity(List<Card> predBoard, ArrayList<Pair<Player,Boolean>> PlayerList) {
         deck.setOriginalCards();
         System.out.println(deck.getOriginalCards()+":"+deck.getOriginalCards().length());
         System.out.println(deck.getOrderCards()+":"+deck.getOrderCards().length());
@@ -83,7 +36,7 @@ public class Game {
         for (int i = 0; i < N_PLAYERS; i++) {
             playerWins.add(0.0);
         }
-        Hand bestHand;
+        Hand bestHand = new Hand();
         Hand currHand;
         int compare;
 
@@ -105,22 +58,30 @@ public class Game {
                 System.out.println(PlayerList.get(k).getPlayerCards().get(0).toString() + " " +PlayerList.get(k).getPlayerCards().get(1).toString());
             }
             System.out.println("Board: "+board.getBoardCard());*/
-            winningPlayers.add(0);
-            PlayerList.get(0).resetHand();
-            PlayerList.get(0).bestHand(board.getBoardCard());
-            bestHand = PlayerList.get(0).getBestHand();
+            int x=0;
+            for (x = 0; x < N_PLAYERS; x++) {
+                if(PlayerList.get(x).getElement1()){
+                    winningPlayers.add(x);
+                    PlayerList.get(x).getElement0().resetHand();
+                    PlayerList.get(x).getElement0().bestHand(board.getBoardCard());
+                    bestHand = PlayerList.get(x).getElement0().getBestHand();
+                    break;
+                }
+            }
 
-            for (int k = 1; k < N_PLAYERS; k++) {
-                PlayerList.get(k).resetHand();
-                PlayerList.get(k).bestHand(board.getBoardCard());
-                currHand = PlayerList.get(k).getBestHand();
-                compare = currHand.compareTo(bestHand);
-                if (compare == 1) {
-                    bestHand = currHand;
-                    winningPlayers.clear();
-                    winningPlayers.add(k);
-                } else if (compare == 0) {
-                    winningPlayers.add(k);
+            for (int k = x+1; k < N_PLAYERS; k++) {
+                if(PlayerList.get(k).getElement1()){
+                    PlayerList.get(k).getElement0().resetHand();
+                    PlayerList.get(k).getElement0().bestHand(board.getBoardCard());
+                    currHand = PlayerList.get(k).getElement0().getBestHand();
+                    compare = currHand.compareTo(bestHand);
+                    if (compare == 1) {
+                        bestHand = currHand;
+                        winningPlayers.clear();
+                        winningPlayers.add(k);
+                    } else if (compare == 0) {
+                        winningPlayers.add(k);
+                    }
                 }
             }
 
@@ -135,7 +96,7 @@ public class Game {
         }
         double suma = 0.0;    
         for (int i = 0; i < N_PLAYERS; i++) {
-            playerWins.set(i, (playerWins.get(i) / N_SIMULATIONS) * 100);
+            playerWins.set(i, (playerWins.get(i) / TOTAL_SIMULATIONS) * 100);
             suma += playerWins.get(i);
         }
         System.out.println(suma);
@@ -144,7 +105,17 @@ public class Game {
     }
     public DeckOfCards getDeck(){
         return deck;
-    } 
+    }
+    public Game copy() {
+        Game clonedGame = null;
+        try {
+            clonedGame = (Game) super.clone();
+            clonedGame.deck = this.deck.copy();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clonedGame;
+    }
 
     
 }

@@ -2,8 +2,9 @@
 package hja.p3;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class DeckOfCards {
+public class DeckOfCards implements Cloneable{
    
     private String orderCards;
     private String originalCards;
@@ -22,12 +23,12 @@ public class DeckOfCards {
         orderCards = originalCards;
     }
     
-    public Card dealingCard(){
+    public synchronized Card dealingCard(){
         String randomCards = "";
         if (orderCards == null || orderCards.length()<1) {
             return null;
         }else{
-            int numero = (int)(Math.random()*orderCards.length());//
+            int numero = ThreadLocalRandom.current().nextInt(orderCards.length());
             if(numero%2==0){
                 randomCards = ""+orderCards.charAt(numero) + orderCards.charAt(numero + 1);
                 orderCards = orderCards.replace(""+orderCards.charAt(numero) + orderCards.charAt(numero + 1),"");
@@ -38,12 +39,16 @@ public class DeckOfCards {
         }
         return  new Card(randomCards.charAt(0)+"",randomCards.charAt(1)+"");             
     }
+
     
     public void addCard(Card c){
         orderCards += c.numberORLetter()+c.getSuit()+"";
     }
     public void removeCard(Card c){
         orderCards = orderCards.replace(""+c.numberORLetter() + c.getSuit(),"");
+    }
+    public boolean contains(Card c){
+        return orderCards.contains(c.numberORLetter()+c.getSuit()+"");
     }
     void setDeck(String a) {
         orderCards = a;
@@ -59,6 +64,16 @@ public class DeckOfCards {
     
     public String getOriginalCards(){
         return originalCards;
+    }
+
+    public DeckOfCards copy() {
+        DeckOfCards copiedDeck = new DeckOfCards();
+
+        // Copia de los datos relevantes
+        copiedDeck.orderCards = new String(this.orderCards);
+        copiedDeck.originalCards = new String("");
+
+        return copiedDeck;   
     }
 
     

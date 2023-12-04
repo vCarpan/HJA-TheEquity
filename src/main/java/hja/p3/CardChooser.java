@@ -34,7 +34,7 @@ public class CardChooser extends JFrame{
                 ImageIcon cardImage = new ImageIcon(imagePath);
                 JLabel cartaLabel = new JLabel(cardImage);
                 cartaLabel.addMouseListener(new CartaMouseListener(card, cardImage, this));
-                add(cartaLabel);
+                if(deck.contains(Card.getCardByIcon(cardImage))) add(cartaLabel);            
             }
         }
         String imagePath = "src\\main\\java\\hja\\p3\\cardsSmaller\\backsideCard.png";

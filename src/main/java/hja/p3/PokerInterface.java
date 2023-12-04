@@ -14,6 +14,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class PokerInterface extends JFrame {
@@ -22,7 +27,7 @@ public class PokerInterface extends JFrame {
             game = new Game();
             setTitle("Poker Game");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(1200, 710);
+            setSize(1200, 740);
 
             JLayeredPane layeredPane = new JLayeredPane();
             setContentPane(layeredPane);
@@ -56,7 +61,7 @@ public class PokerInterface extends JFrame {
             for (int i = 1; i <= 6; i++) {
                 PlayerPanel playerPanel = new PlayerPanel("Player " + i,game.getDeck());
                 playerPanel.setOpaque(false);
-                playerPanel.setBounds(playerPositions[i - 1].x - 75, playerPositions[i - 1].y - 75, 165, 175);
+                playerPanel.setBounds(playerPositions[i - 1].x - 75, playerPositions[i - 1].y - 75, 165, 190);
                 layeredPane.add(playerPanel, Integer.valueOf(Integer.MAX_VALUE));
                 playersPanel.add(playerPanel);
             }
@@ -96,20 +101,21 @@ public class PokerInterface extends JFrame {
             evaluateButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    int jugadores = 0;
                     ArrayList<Card> predBoard = new ArrayList();
-                    ArrayList<Player> playerList = new ArrayList();
-                    boolean correcto = true;
+                    ArrayList<Pair<Player,Boolean>> playerList = new ArrayList();
                     for(int i=0; i<playersPanel.size(); i++){
                         Pair<Card,Card> pair = playersPanel.get(i).getCards();
                         if(pair.getElement0()!=null && pair.getElement1()!=null){
-                            playerList.add(new Player("J" + i));
-                            playerList.get(i).addCard(pair.getElement0());
-                            playerList.get(i).addCard(pair.getElement1());
-                        }else{                      
-                            correcto = false;
-                            JOptionPane.showMessageDialog(null, "Las cartas de los jugadores deben ser seleccionadas", "Error", JOptionPane.ERROR_MESSAGE);
-                            break;
-                        }                       
+                            boolean notFold = !playersPanel.get(i).isFold();
+                            if(notFold) jugadores++;
+                            playerList.add(new Pair(new Player("J" + i),notFold));
+                            playerList.get(i).getElement0().addCard(pair.getElement0());
+                            playerList.get(i).getElement0().addCard(pair.getElement1());   
+                        }else{
+                            playerList.add(new Pair(new Player("J" + i),false));
+                            playersPanel.get(i).setFold();
+                        }
                     }
                     for(int i=0; i<boardPanel.size(); i++){
                         Card c = boardPanel.get(i).getCard();
@@ -117,12 +123,47 @@ public class PokerInterface extends JFrame {
                             predBoard.add(c);
                         }                  
                     }
-                    if(correcto){
+                    if(jugadores>1){
+                        /*
+                        // Crea un ExecutorService con 4 hilos
+                        ExecutorService executorService = Executors.newFixedThreadPool(4);
+
+                        // Lista para almacenar los resultados futuros de los hilos
+                        java.util.List<Future<java.util.List<Double>>> futures = new ArrayList<>();
+
+                        // Envía Callable para ejecutar getEquity en paralelo
+                        for (int i = 0; i < 4; i++) {
+                            Game gameCopy = game.copy();  // Implementa el método copy en tu clase Game
+                            java.util.List<Card> predBoardCopy = new ArrayList<>(predBoard);
+                            Callable<java.util.List<Double>> task = () -> gameCopy.getEquity(predBoardCopy, playerList);
+                            // Envía el Callable al ExecutorService y guarda el Future resultante
+                            futures.add(executorService.submit(task));
+                        }
+
+                        // Espera a que todos los hilos terminen y suma los resultados
+                        java.util.List<Double> playerWins = new ArrayList<>();
+                        for(int i=0; i<6;i++){
+                            playerWins.add(0.0);
+                        }
+                        for (Future<java.util.List<Double>> future : futures) {                         
+                            try {
+                                for(int i=0; i<future.get().size();i++){
+                                    playerWins.set(i,playerWins.get(i)+future.get().get(i));
+                                }
+                            } catch (InterruptedException | ExecutionException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        for(int i=0; i<playerWins.size();i++){                           
+                            playersPanel.get(i).setNumber(playerWins.get(i));                            
+                        }*/
                         java.util.List<Double> playerWins = game.getEquity(predBoard,playerList);
                         for(int i=0; i<playerWins.size();i++){                           
                             playersPanel.get(i).setNumber(playerWins.get(i));                            
-                        }    
-                    }                                        
+                        }  
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Debe haber por lo menos dos jugadores aptos", "Error",JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             });
             evaluatePanel.add(evaluateButton);
